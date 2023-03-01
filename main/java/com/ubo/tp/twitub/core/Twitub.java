@@ -2,8 +2,11 @@ package main.java.com.ubo.tp.twitub.core;
 
 import java.io.File;
 
+import main.java.com.ubo.tp.twitub.component.*;
+import main.java.com.ubo.tp.twitub.controller.*;
 import main.java.com.ubo.tp.twitub.datamodel.Database;
 import main.java.com.ubo.tp.twitub.datamodel.IDatabase;
+import main.java.com.ubo.tp.twitub.datamodel.User;
 import main.java.com.ubo.tp.twitub.datamodel.WatchableDataBase;
 import main.java.com.ubo.tp.twitub.events.file.IWatchableDirectory;
 import main.java.com.ubo.tp.twitub.events.file.WatchableDirectory;
@@ -15,11 +18,28 @@ import main.java.com.ubo.tp.twitub.ihm.TwitubMock;
  *
  * @author S.Lucas
  */
-public class Twitub {
+public class Twitub implements IController{
     /**
      * Base de données.
      */
     protected IDatabase mDatabase;
+
+    /**
+     * Controller du principale
+     */
+    protected IController mController;
+
+    protected ControllerSignIn controllerSignIn;
+
+    /**
+     * Controller du view Login
+     */
+    ControllerLogin controllerLogin;
+
+    /**
+     * Controller du view Login
+     */
+    HomeController homeController;
 
     /**
      * Gestionnaire des entités contenu de la base de données.
@@ -52,6 +72,16 @@ public class Twitub {
      */
     protected String mUiClassName;
 
+    protected User tagUser;
+
+    public User getTagUser() {
+        return tagUser;
+    }
+
+    public void setTagUser(User tagUser) {
+        this.tagUser = tagUser;
+    }
+
     /**
      * Constructeur.
      */
@@ -62,19 +92,29 @@ public class Twitub {
         // Initialisation de la base de données
         this.initDatabase();
 
-        if (this.mIsMockEnabled) {
-            // Initialisation du bouchon de travail
-            this.initMock();
-        } else {
-            // Initialisation de la vue principale
-            this.initPrincipalView();
-        }
 
+
+        // Initialisation du controller
+        this.initController();
+
+//        if (this.mIsMockEnabled) {
+//            // Initialisation du bouchon de travail
+//            this.initMock();
+//        }
         // Initialisation de l'IHM
+        this.initMock();
         this.initGui();
+
 
         // Initialisation du répertoire d'échange
         this.initDirectory("H:\\IHM\\BDD");
+
+    }
+
+    private void initController() {
+        controllerSignIn = new ControllerSignIn(mDatabase, this);
+        controllerLogin = new ControllerLogin(mDatabase, this);
+        homeController = new HomeController(mDatabase.getTwits(), mDatabase.getUsers(), this.getTagUser(), this);
 
     }
 
@@ -89,6 +129,8 @@ public class Twitub {
      */
     protected void initGui() {
         // this.mMainView...
+        this.mMainView = new TwitubMainView(this.mEntityManager);
+        mMainView.showGUI(controllerLogin);
     }
 
     /**
@@ -120,11 +162,6 @@ public class Twitub {
         mock.showGUI();
     }
 
-    protected void initPrincipalView(){
-        this.mMainView = new TwitubMainView(this.mDatabase, this.mEntityManager);
-        mMainView.showGUI();
-    }
-
     /**
      * Initialisation de la base de données
      */
@@ -133,14 +170,19 @@ public class Twitub {
         mEntityManager = new EntityManager(mDatabase);
         mDatabase.addObserver(new WatchableDataBase());
 
+
     }
 
     /**
-     * Initialisation du répertoire d'échange.
+     * Initialisation du répertoire d'échange (depuis la conf ou depuis un file
+     * chooser). <br/>
+     * <b>Le chemin doit obligatoirement avoir été saisi et être valide avant de
+     * pouvoir utiliser l'application</b>
      *
      * @param directoryPath
      */
     public void initDirectory(String directoryPath) {
+        mDatabase.addObserver(this.homeController);
         mExchangeDirectoryPath = directoryPath;
         mWatchableDirectory = new WatchableDirectory(directoryPath);
         mEntityManager.setExchangeDirectory(directoryPath);
@@ -152,5 +194,30 @@ public class Twitub {
 
     public void show() {
         // ... setVisible?
+    }
+
+    @Override
+    public void showHome() {
+        mMainView.show(new Home(homeController));
+    }
+
+    @Override
+    public void showLogin() {
+        mMainView.show(new Login(controllerLogin));
+    }
+
+    @Override
+    public void showSignIn() {
+        mMainView.show(new SignIn(controllerSignIn));
+    }
+
+    @Override
+    public void showProfil() {
+        mMainView.show(new Profil());
+    }
+
+    @Override
+    public void showAddTwit() {
+        mMainView.show(new Twitpanel().getPanel());
     }
 }

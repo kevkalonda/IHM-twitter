@@ -1,23 +1,17 @@
 package main.java.com.ubo.tp.twitub.ihm;
 
+import main.java.com.ubo.tp.twitub.component.Login;
+import main.java.com.ubo.tp.twitub.controller.ControllerLogin;
 import main.java.com.ubo.tp.twitub.core.EntityManager;
-import main.java.com.ubo.tp.twitub.datamodel.IDatabase;
-import main.java.com.ubo.tp.twitub.datamodel.Twit;
-import main.java.com.ubo.tp.twitub.datamodel.User;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.UUID;
 
 /**
  * Classe de la vue principale de l'application.
  */
 public class TwitubMainView {
+
 
     /**
      * Fenetre du bouchon
@@ -25,34 +19,34 @@ public class TwitubMainView {
     protected JFrame mFrame;
 
     /**
-     * Base de donénes de l'application.
-     */
-    protected IDatabase mDatabase;
-
-    /**
      * Gestionnaire de bdd et de fichier.
      */
     protected EntityManager mEntityManager;
 
-    private final String imgUrl = "H:\\IHM\\img\\logo.jpg";
+    private final String imgUrl = "H:\\IHM\\img\\index.png";
 
     /**
      * Constructeur.
      *
-     * @param database , Base de données de l'application.
+     * @param  entityManager, Base de données de l'application.
      */
-    public TwitubMainView(IDatabase database, EntityManager entityManager) {
-        this.mDatabase = database;
+    public TwitubMainView( EntityManager entityManager) {
         this.mEntityManager = entityManager;
     }
 
+    public void show(JPanel panel) {
+        this.mFrame.getContentPane().removeAll();
+        this.mFrame.getContentPane().add(panel);
+        mFrame.setVisible(true);
+        mFrame.pack();
+    }
     /**
      * Lance l'afficahge de l'IHM.
      */
-    public void showGUI() {
+    public void showGUI(ControllerLogin controllerLogin) {
         // Init auto de l'IHM au cas ou ;)
         if (mFrame == null) {
-            this.initGUI();
+            this.initGUI(controllerLogin);
         }
 
         // Affichage dans l'EDT
@@ -75,161 +69,38 @@ public class TwitubMainView {
     /**
      * Initialisation de l'IHM
      */
-    protected void initGUI() {
+    protected void initGUI(ControllerLogin controllerLogin) {
+
         // Création de la fenetre principale
         mFrame = new JFrame("LUMWANGA");
         mFrame.setLayout(new GridBagLayout());
 
         ImageIcon icone = new ImageIcon(imgUrl);
         Image image = icone.getImage();
-        Image newImage = image.getScaledInstance(150, 100, Image.SCALE_DEFAULT);
-        icone = new ImageIcon(newImage);
+        Image newImage = image.getScaledInstance(40, 40, 10);
         //Création de JLable avec un alignement gauche
         JLabel jlabel = new JLabel(icone);
 
 
+        JMenu menu;
+        JMenuItem e1, e2, e3;
+        JMenuBar menubar = new JMenuBar();
 
-        //
-        // Gestion de la base de données
+        menu = new JMenu("Menu");
+        e1 = new JMenuItem("Inscription");
+        e2 = new JMenuItem("Connexion");
+        e3 = new JMenuItem("Annuler");
 
-        JLabel dbLabel = new JLabel("TWITTER");
+        menu.add(e1);
+        menu.add(e2);
+        menu.add(e3);
+        menubar.add(menu);
 
-        Button addUserButton = new Button("Add User");
-        addUserButton.setPreferredSize(new Dimension(100, 50));
-        addUserButton.addActionListener(new ActionListener() {
+        mFrame.setIconImage(newImage);
+        mFrame.setJMenuBar(menubar);
+        Login l = new Login(controllerLogin);
 
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                TwitubMainView.this.addUserInDatabase();
-            }
-        });
-
-        Button addTwitButton = new Button("Add Twit");
-        addTwitButton.setPreferredSize(new Dimension(100, 50));
-        addTwitButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                TwitubMainView.this.addTwitInDatabase();
-            }
-        });
-
-        //
-        // Gestion des fichiers
-
-        JLabel fileLabel = new JLabel("Files");
-
-        Button sendUserButton = new Button("Send User");
-        sendUserButton.setPreferredSize(new Dimension(100, 50));
-        sendUserButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                TwitubMainView.this.sendUser();
-            }
-        });
-
-        Button sendTwitButton = new Button("Send Twit");
-        sendTwitButton.setPreferredSize(new Dimension(100, 50));
-        sendTwitButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                TwitubMainView.this.sendTwit();
-            }
-        });
-
-        //
-        // Ajout des composants à la fenêtre
-        this.mFrame.add(jlabel, new GridBagConstraints(0, 0, 2, 1, 1, 1, GridBagConstraints.CENTER,
-                GridBagConstraints.NONE, new Insets(0, 0, 200, 0), 0, 0));
-        this.mFrame.add(dbLabel, new GridBagConstraints(0, 0, 2, 1, 1, 1, GridBagConstraints.CENTER,
-                GridBagConstraints.NONE, new Insets(0, 0, 0, 5), 0, 0));
-        this.mFrame.add(addUserButton, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.WEST,
-                GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0));
-        this.mFrame.add(addTwitButton, new GridBagConstraints(1, 1, 1, 1, 1, 1, GridBagConstraints.EAST,
-                GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0));
-        this.mFrame.add(fileLabel, new GridBagConstraints(0, 2, 2, 1, 1, 1, GridBagConstraints.CENTER,
-                GridBagConstraints.NONE, new Insets(15, 5, 0, 5), 0, 0));
-        this.mFrame.add(sendUserButton, new GridBagConstraints(0, 3, 1, 1, 1, 1, GridBagConstraints.WEST,
-                GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0));
-        this.mFrame.add(sendTwitButton, new GridBagConstraints(1, 3, 1, 1, 1, 1, GridBagConstraints.EAST,
-                GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0));
-
+        mFrame.add(l,new GridBagConstraints(0, 0, 0, 0, 0, 0, GridBagConstraints.CENTER,
+                GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 10, 0));
     }
-
-    /**
-     * Ajoute un utilisateur fictif à la base de donnée.
-     */
-    protected void addUserInDatabase() {
-        // Création d'un utilisateur fictif
-        User newUser = this.generateUser();
-        // Ajout de l'utilisateur à la base
-        this.mDatabase.addUser(newUser);
-    }
-
-    /**
-     * Génération et envoi d'un fichier utilisateur
-     */
-    protected void sendUser() {
-        // Création d'un utilisateur fictif
-        User newUser = this.generateUser();
-
-        // Génération du fichier utilisateur
-        this.mEntityManager.sendUser(newUser);
-    }
-
-    /**
-     * Génération d'un utilisateur fictif.
-     */
-    protected User generateUser() {
-        int randomInt = new Random().nextInt(99999);
-        String userName = "MockUser" + randomInt;
-        User newUser = new User(UUID.randomUUID(), userName, "--", userName, new HashSet<>(), "");
-
-        return newUser;
-    }
-
-    /**
-     * Ajoute un twit fictif à la base de données.
-     */
-    protected void addTwitInDatabase() {
-        // Création 'un twit fictif
-        Twit newTwit = this.generateTwit();
-
-        // Ajout du twit
-        this.mDatabase.addTwit(newTwit);
-    }
-
-    /**
-     * Génération et envoi d'un fichier twit
-     */
-    protected void sendTwit() {
-        // Création d'un twit fictif
-        Twit newTwit = this.generateTwit();
-
-        // Génération du fichier twit
-        this.mEntityManager.sendTwit(newTwit);
-    }
-
-    /**
-     * Génération d'un twit fictif.
-     */
-    protected Twit generateTwit() {
-        // Si la base n'a pas d'utilisateur
-        if (this.mDatabase.getUsers().size() == 0) {
-            // Création d'un utilisateur
-            this.addUserInDatabase();
-        }
-
-        // Récupération d'un utilisateur au hazard
-        int userIndex = new Random().nextInt(this.mDatabase.getUsers().size());
-        User randomUser = new ArrayList<User>(this.mDatabase.getUsers()).get(Math.max(0, userIndex - 1));
-
-        // Création d'un twit fictif
-        Twit newTwit = new Twit(randomUser, "Twit fictif!! #Mock #test ;)");
-
-        return newTwit;
-    }
-
 }

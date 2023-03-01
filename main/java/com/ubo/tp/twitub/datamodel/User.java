@@ -6,164 +6,190 @@ import java.util.UUID;
 
 /**
  * Classe du modèle représentant un utilisateur.
- * 
+ *
  * @author S.Lucas
  */
 public class User {
-	/**
-	 * Identifiant unique de l'utilisateur.
-	 */
-	protected final UUID mUuid;
+    /**
+     * Identifiant unique de l'utilisateur.
+     */
+    protected final UUID mUuid;
 
-	/**
-	 * Tag non modifiable correspondant à l'utilisateur. <br/>
-	 * <i>Doit être unique dans le système</i>
-	 */
-	protected final String mUserTag;
+    /**
+     * Tag non modifiable correspondant à l'utilisateur. <br/>
+     * <i>Doit être unique dans le système</i>
+     */
+    protected final String mUserTag;
 
-	/**
-	 * Mot de passe de l'utilisateur.
-	 */
-	protected String mUserPassword;
+    /**
+     * Mot de passe de l'utilisateur.
+     */
+    protected String mUserPassword;
 
-	/**
-	 * Nom de l'utilisateur.
-	 */
-	protected String mName;
+    /**
+     * Nom de l'utilisateur.
+     */
+    protected String mName;
 
-	/**
-	 * Liste des tags suivis par l'utilisateur.
-	 */
-	protected final Set<String> mFollows;
+    /**
+     * Mail de l'utilisateur
+     */
+    protected String mMail;
 
-	/**
-	 * Chemin d'accès à l'image de l'avatar de l'utilisateur.
-	 */
-	protected String mAvatarPath;
+    /**
+     * Prénom de l'utilisateur
+     */
+    protected String mPrenom;
 
-	/**
-	 * Constructeur.
-	 * 
-	 * @param uuid
-	 *            , Identifiant unique de l'utilisateur.
-	 * @param userTag
-	 *            , Tag correspondant à l'utilisateur.
-	 * @param name
-	 *            , Nom de l'utilisateur.
-	 * @param follows
-	 *            , Liste des tags suivis.
-	 * @param avatarPath
-	 *            , Chemin d'accès à l'image de l'avatar.
-	 */
-	public User(UUID uuid, String userTag, String userPassword, String name, Set<String> follows, String avatarPath) {
-		mUuid = uuid;
-		mUserTag = userTag;
-		mUserPassword = userPassword;
-		mName = name;
-		mFollows = follows;
-		mAvatarPath = avatarPath;
-	}
+    /**
+     * Liste des tags suivis par l'utilisateur.
+     */
+    protected final Set<String> mFollows;
 
-	/**
-	 * Retourne l'identifiant unique de l'utilisateur.
-	 */
-	public UUID getUuid() {
-		return this.mUuid;
-	}
+    /**
+     * Chemin d'accès à l'image de l'avatar de l'utilisateur.
+     */
+    protected String mAvatarPath;
 
-	/**
-	 * Retourne le nom de l'utilisateur.
-	 */
-	public String getName() {
-		return mName;
-	}
+    /**
+     * Le sexe d'un utilisateur
+     */
+    protected String sexe;
 
-	/**
-	 * Assigne le nom de l'utilisateur.
-	 * 
-	 * @param name
-	 */
-	public void setName(String name) {
-		this.mName = name;
-	}
+    /**
+     * Accesseur du sexe
+     *
+     * @return {@link String}
+     */
+    public String getSexe() {
+        return sexe;
+    }
 
-	/**
-	 * Retourne le tag correspondant à l'utilisateur.
-	 */
-	public String getUserTag() {
-		return this.mUserTag;
-	}
+    /**
+     * Accesseur du sexe
+     *
+     * @param sexe {@link String}
+     */
+    public void setSexe(String sexe) {
+        this.sexe = sexe;
+    }
 
-	/**
-	 * Retourne le mot de passe de l'utilisateur.
-	 */
-	public String getUserPassword() {
-		return this.mUserPassword;
-	}
+    /**
+     * Constructeur.
+     *
+     * @param uuid       , Identifiant unique de l'utilisateur.
+     * @param userTag    , Tag correspondant à l'utilisateur.
+     * @param name       , Nom de l'utilisateur.
+     * @param follows    , Liste des tags suivis.
+     * @param avatarPath , Chemin d'accès à l'image de l'avatar.
+     */
+    public User(UUID uuid, String userTag, String userPassword, String name, Set<String> follows, String avatarPath) {
+        mUuid = uuid;
+        mUserTag = userTag;
+        mUserPassword = userPassword;
+        mName = name;
+        mFollows = follows;
+        mAvatarPath = avatarPath;
+    }
 
-	/**
-	 * Assigne le mot de passe de l'utilisateur.
-	 * 
-	 * @param userPassword
-	 */
-	public void setUserPassword(String userPassword) {
-		this.mUserPassword = userPassword;
-	}
+    /**
+     * Retourne l'identifiant unique de l'utilisateur.
+     */
+    public UUID getUuid() {
+        return this.mUuid;
+    }
 
-	/**
-	 * Retourne la liste clonée des tag suivis par l'utilsateur.
-	 */
-	public Set<String> getFollows() {
-		// Clonage pour éviter les modifications exterieures
-		return new HashSet<>(this.mFollows);
-	}
+    /**
+     * Retourne le nom de l'utilisateur.
+     */
+    public String getName() {
+        return mName;
+    }
 
-	/**
-	 * Retire un tag de la liste des tags suivis.
-	 * 
-	 * @param tagToRemove
-	 *            , tag à retirer.
-	 */
-	public void removeFollowing(String tagToRemove) {
-		this.mFollows.remove(tagToRemove);
-	}
+    /**
+     * Assigne le nom de l'utilisateur.
+     *
+     * @param name
+     */
+    public void setName(String name) {
+        this.mName = name;
+    }
 
-	/**
-	 * Ajout un tag de la liste des tags suivis.
-	 * 
-	 * @param tagToFollow
-	 *            , tag à ajouter.
-	 */
-	public void addFollowing(String tagToFollow) {
-		this.mFollows.add(tagToFollow);
-	}
+    /**
+     * Retourne le tag correspondant à l'utilisateur.
+     */
+    public String getUserTag() {
+        return this.mUserTag;
+    }
 
-	/**
-	 * Retourne le chemin d'accès au fichier de l'avatar de l'utilisateur.
-	 */
-	public String getAvatarPath() {
-		return this.mAvatarPath;
-	}
+    /**
+     * Retourne le mot de passe de l'utilisateur.
+     */
+    public String getUserPassword() {
+        return this.mUserPassword;
+    }
 
-	/**
-	 * Assigne le chemin d'accès au fichier de l'avatar de l'utilisateur.
-	 * 
-	 * @param avatarPath
-	 */
-	public void setAvatarPath(String avatarPath) {
-		this.mAvatarPath = avatarPath;
-	}
+    /**
+     * Assigne le mot de passe de l'utilisateur.
+     *
+     * @param userPassword
+     */
+    public void setUserPassword(String userPassword) {
+        this.mUserPassword = userPassword;
+    }
 
-	/**
-	 * Indique si l'utilisateur suit l'utilisateur donné.
-	 */
-	public boolean isFollowing(User userToCheck) {
-		return this.getFollows().contains(userToCheck.getUserTag());
-	}
+    /**
+     * Retourne la liste clonée des tag suivis par l'utilsateur.
+     */
+    public Set<String> getFollows() {
+        // Clonage pour éviter les modifications exterieures
+        return new HashSet<>(this.mFollows);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * Retire un tag de la liste des tags suivis.
+     *
+     * @param tagToRemove , tag à retirer.
+     */
+    public void removeFollowing(String tagToRemove) {
+        this.mFollows.remove(tagToRemove);
+    }
+
+    /**
+     * Ajout un tag de la liste des tags suivis.
+     *
+     * @param tagToFollow , tag à ajouter.
+     */
+    public void addFollowing(String tagToFollow) {
+        this.mFollows.add(tagToFollow);
+    }
+
+    /**
+     * Retourne le chemin d'accès au fichier de l'avatar de l'utilisateur.
+     */
+    public String getAvatarPath() {
+        return this.mAvatarPath;
+    }
+
+    /**
+     * Assigne le chemin d'accès au fichier de l'avatar de l'utilisateur.
+     *
+     * @param avatarPath
+     */
+    public void setAvatarPath(String avatarPath) {
+        this.mAvatarPath = avatarPath;
+    }
+
+    /**
+     * Indique si l'utilisateur suit l'utilisateur donné.
+     */
+    public boolean isFollowing(User userToCheck) {
+        return this.getFollows().contains(userToCheck.getUserTag());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
 //	-> A activer... pourquoi ?
 //	public int hashCode() {
 //		int hashCode = 0;
@@ -174,41 +200,58 @@ public class User {
 //
 //		return hashCode;
 //	}
-	
-	/**
-	 * @{inheritDoc
-	 */
-	@Override
-	public boolean equals(Object other) {
-		boolean equals = false;
+    public String getmMail() {
+        return mMail;
+    }
 
-		if (other != null) {
-			if (other instanceof User) {
-				User otherUser = (User) other;
-				equals = (this.getUuid().equals(otherUser.getUuid()));
-			}
-		}
+    public void setmMail(String mMail) {
+        this.mMail = mMail;
+    }
 
-		return equals;
-	}
+    public String getmPrenom() {
+        return mPrenom;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
+    public void setmPrenom(String mPrenom) {
+        this.mPrenom = mPrenom;
+    }
 
-		sb.append("[");
-		sb.append(this.getClass().getName());
-		sb.append("] : ");
-		sb.append(this.getUuid());
-		sb.append(" {@");
-		sb.append(this.getUserTag());
-		sb.append(" / ");
-		sb.append(this.getName());
-		sb.append("}");
+    /**
+     * @{inheritDoc
+     */
+    @Override
+    public boolean equals(Object other) {
+        boolean equals = false;
 
-		return sb.toString();
-	}
+        if (other != null) {
+            if (other instanceof User) {
+                User otherUser = (User) other;
+                equals = (this.getUuid().equals(otherUser.getUuid()));
+            }
+        }
+
+        return equals;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+
+        sb.append("[");
+        sb.append(this.getClass().getName());
+        sb.append(" - ");
+        sb.append(this.getmPrenom());
+        sb.append("] : ");
+        sb.append(this.getUuid());
+        sb.append(" {@");
+        sb.append(this.getUserTag());
+        sb.append(" / ");
+        sb.append(this.getName());
+        sb.append("}");
+
+        return sb.toString();
+    }
 }
