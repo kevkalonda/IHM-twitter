@@ -1,6 +1,7 @@
 package main.java.com.ubo.tp.twitub.controller;
 
-import main.java.com.ubo.tp.twitub.core.Twitub;
+
+import main.java.com.ubo.tp.twitub.core.EntityManager;
 import main.java.com.ubo.tp.twitub.datamodel.IDatabase;
 import main.java.com.ubo.tp.twitub.datamodel.IDatabaseObserver;
 import main.java.com.ubo.tp.twitub.datamodel.Twit;
@@ -16,9 +17,48 @@ public class HomeController implements IDatabaseObserver, Observable {
 
     Set<Observer> observers;
 
-    public HomeController() {
+    IController controller;
+    IDatabase database;
+    EntityManager entityManager;
+
+
+    public HomeController(IController controller, IDatabase database, EntityManager entityManager) {
         observers = new HashSet<>();
+        this.controller = controller;
+        this.database = database;
+        this.entityManager = entityManager;
     }
+
+    public void showHome(){
+        this.controller.showHome();
+    }
+    public  void redirectMesTwits(){
+        controller.showUser();
+    }
+
+    /**
+     *
+     * @param tagName
+     * @param user
+     */
+    public void addFollower(String tagName, User user) {
+        user.addFollowing(tagName);
+        this.entityManager.sendUser(user);
+    }
+    /**
+     *
+     * @param tagName
+     * @param user
+     */
+    public void removeFollower(String tagName, User user) {
+        user.removeFollowing(tagName);
+        this.entityManager.sendUser(user);
+    }
+
+    public Set<User> getAllUser(){
+        return this.database.getUsers();
+    }
+
 
     /**
      * Notification lorsqu'un Twit est ajouté en base de données.
@@ -105,5 +145,9 @@ public class HomeController implements IDatabaseObserver, Observable {
         for(Observer observer : this.observers){
             observer.update();
         }
+    }
+
+    public void redirectAddTwit() {
+        controller.showAddTwit();
     }
 }

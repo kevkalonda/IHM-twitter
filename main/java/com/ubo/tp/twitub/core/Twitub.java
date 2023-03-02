@@ -3,7 +3,8 @@ package main.java.com.ubo.tp.twitub.core;
 import main.java.com.ubo.tp.twitub.component.*;
 import main.java.com.ubo.tp.twitub.controller.*;
 import main.java.com.ubo.tp.twitub.datamodel.*;
-import main.java.com.ubo.tp.twitub.datamodel.model.ModelHome;
+
+import main.java.com.ubo.tp.twitub.datamodel.model.*;
 import main.java.com.ubo.tp.twitub.events.file.IWatchableDirectory;
 import main.java.com.ubo.tp.twitub.events.file.WatchableDirectory;
 import main.java.com.ubo.tp.twitub.ihm.TwitubMainView;
@@ -31,6 +32,11 @@ public class Twitub implements IController {
     protected ControllerSignIn controllerSignIn;
 
     /**
+     *
+     */
+    ProfilController profilController;
+
+    /**
      * Controller du view Login
      */
     ControllerLogin controllerLogin;
@@ -43,7 +49,19 @@ public class Twitub implements IController {
     /**
      * Controller du view voir un twit
      */
-    Controlerenvoyertwit controlerenvoyertwit;
+    ControllerEnvoyerTwit controlerenvoyertwit;
+
+    /**
+     * Controller Menu
+     */
+    MenuController menuController;
+
+    /**
+     *
+     */
+    MesTwitsController mesTwitsController;
+
+    SearchController searchController;
 
     /**
      * Gestionnaire des entités contenu de la base de données.
@@ -72,21 +90,36 @@ public class Twitub implements IController {
     protected boolean mIsMockEnabled = true;
 
     /**
+     * Model utilisateur
+     */
+    protected ModelUtilisateurs modelUtilisateurs;
+
+    /**
+     * Model de recherche de l'tilisateur
+     */
+    protected ModelSearch modelSearch;
+    /**
      * Nom de la classe de l'UI.
      */
     protected String mUiClassName;
 
-    protected User tagUser;
 
     protected ModelHome modelHome;
 
-    public User getTagUser() {
-        return tagUser;
+
+    protected ListTwits listTwits;
+
+    protected ListUsers listUsers;
+
+    public ListTwits getListTwits() {
+        return listTwits;
     }
 
-    public void setTagUser(User tagUser) {
-        this.tagUser = tagUser;
+    public Session getSession() {
+        return session;
     }
+
+    protected Session session;
 
     /**
      * Constructeur.
@@ -97,7 +130,6 @@ public class Twitub implements IController {
 
         // Initialisation de la base de données
         this.initDatabase();
-
 
         // Initialisation du controller
         this.initController();
@@ -112,19 +144,28 @@ public class Twitub implements IController {
 
 
         // Initialisation du répertoire d'échange
-        this.initDirectory("H:\\IHM\\BDD");
+        this.initDirectory("main/BDD");
 
     }
 
     private void initModel() {
-        modelHome = new ModelHome(this);
+
+        modelSearch = new ModelSearch(searchController, homeController);
+        modelHome = new ModelHome(this, homeController, searchController);
+        modelUtilisateurs = new ModelUtilisateurs(session,homeController, searchController);
     }
 
     private void initController() {
-        controllerSignIn = new ControllerSignIn(mDatabase, this);
-        controllerLogin = new ControllerLogin(mDatabase, this);
-        homeController = new HomeController( );
-        controlerenvoyertwit = new Controlerenvoyertwit(mDatabase, this, null);
+        controllerSignIn = new ControllerSignIn(this, this.mEntityManager, mDatabase);
+        profilController = new ProfilController(this.mEntityManager, this, this.session);
+        controllerLogin = new ControllerLogin(this.mDatabase, this, this.session, this.listTwits, listUsers);
+        homeController = new HomeController(this, mDatabase, mEntityManager);
+        controlerenvoyertwit = new ControllerEnvoyerTwit(this.mEntityManager, this, session);
+        mesTwitsController = new MesTwitsController(this);
+        menuController = new MenuController(this, this.session);
+        searchController = new SearchController(this, mDatabase, this.listTwits, this.session, this.listUsers);
+
+        initModel();
     }
 
     /**
@@ -138,14 +179,17 @@ public class Twitub implements IController {
     }
 
 
-
     /**
      * Initialisation de l'interface graphique.
      */
     protected void initGui() {
         // this.mMainView...
+
+
         this.homeController.addObserver(this.modelHome);
-        this.mMainView = new TwitubMainView(this.mEntityManager);
+        this.homeController.addObserver(this.modelUtilisateurs);
+        this.homeController.addObserver(this.modelSearch);
+        this.mMainView = new TwitubMainView(this.mEntityManager, menuController);
         mMainView.showGUI(controllerLogin);
     }
 
@@ -186,11 +230,12 @@ public class Twitub implements IController {
      * Initialisation de la base de données
      */
     protected void initDatabase() {
+        this.listTwits = new ListTwits();
+        listUsers = new ListUsers();
+        session = new Session();
         mDatabase = new Database();
         mEntityManager = new EntityManager(mDatabase);
         mDatabase.addObserver(new WatchableDataBase());
-
-
     }
 
     /**
@@ -209,7 +254,6 @@ public class Twitub implements IController {
 
         mWatchableDirectory.initWatching();
         mWatchableDirectory.addObserver(mEntityManager);
-
     }
 
     public void show() {
@@ -233,11 +277,39 @@ public class Twitub implements IController {
 
     @Override
     public void showProfil() {
-        mMainView.show(new Profil());
+        mMainView.show(new Profil(profilController));
     }
 
     @Override
     public void showAddTwit() {
         mMainView.show(new Twitpanel(controlerenvoyertwit).getPanel());
+
+    }
+
+    @Override
+    public void showMyTwits() {
+        mMainView.show(new MesTwits(mDatabase.getTwitsWithTag(null), this.session.getUser()));
+    }
+
+    @Override
+    public void showUser() {
+        mMainView.show(modelUtilisateurs.showUtilisateur());
+    }
+
+    @Override
+    public void showResultSearchTwit() {
+        mMainView.show(modelSearch.showResultTwits());
+    }
+
+    @Override
+    public void showResultSearchUser() {
+        mMainView.show(modelSearch.showResultUsers());
+    }
+
+    /**
+     * @return {@link Set<User>}
+     */
+    public Set<User> getAllUser() {
+        return mDatabase.getUsers();
     }
 }

@@ -1,9 +1,9 @@
 package main.java.com.ubo.tp.twitub.datamodel;
 
+import main.java.com.ubo.tp.twitub.common.Constants;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import main.java.com.ubo.tp.twitub.common.Constants;
 
 /**
  * Classe représentant les donénes chargées dans l'application.
@@ -66,6 +66,8 @@ public class Database implements IDatabase {
 			observer.notifyTwitAdded(twitToAdd);
 		}
 	}
+
+
 
 	/**
 	 * @{inheritDoc
@@ -210,6 +212,20 @@ public class Database implements IDatabase {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Set<Twit> getTwitsByUserTag(String tag) {
+		Set<Twit> taggedTwits = new HashSet<>();
+		for (Twit twit : this.getTwits()) {
+			if (twit.getTwiter().getUserTag().equals(tag)) {
+				taggedTwits.add(twit);
+			}
+		}
+		return taggedTwits;
+	}
+
+	/**
 	 * @{inheritDoc
 	 */
 	@Override
@@ -227,6 +243,8 @@ public class Database implements IDatabase {
 		return userTwits;
 	}
 
+
+
 	/**
 	 * @{inheritDoc
 	 */
@@ -243,6 +261,21 @@ public class Database implements IDatabase {
 		}
 
 		return followers;
+	}
+	/**
+	 * Trouver un utilisateur à partir de son tag.
+	 *
+	 * @param tag le tag de l'utilisateur
+	 * @return {@link User}
+	 */
+	@Override
+	public User findUserByTag(String tag) {
+		for (User otherUser : this.getUsers()) {
+			if(otherUser.getUserTag().equals(tag)){
+				return otherUser;
+			}
+		}
+		return null;
 	}
 
 	public Set<User> getFollowed(User user) {
