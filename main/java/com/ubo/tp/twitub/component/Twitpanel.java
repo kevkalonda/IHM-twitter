@@ -1,9 +1,15 @@
 package main.java.com.ubo.tp.twitub.component;
 
+import main.java.com.ubo.tp.twitub.controller.Controlerenvoyertwit;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Twitpanel extends JPanel {
+
+    Controlerenvoyertwit controlerenvoyertwit;
 
     JPanel panel;
 
@@ -18,7 +24,8 @@ public class Twitpanel extends JPanel {
      * @param database , Base de donnÃ©es de l'application.
      */
 
-    public Twitpanel() {
+    public Twitpanel(Controlerenvoyertwit c) {
+        this.controlerenvoyertwit=c;
         // CrÃ©ation de la fenetre principale
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
@@ -65,8 +72,18 @@ public class Twitpanel extends JPanel {
         );
 
 
+/**
+ * Action listerner boutton
+ */
+        btnConnexion.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String twit= textField.getText();
+                Twitpanel.this.controlerenvoyertwit.publier(twit);
 
-        //Ajout des labels Ã  la frame
+            }
+        });
+        //Ajout des labels Ã  la frame
         panel.add(jlabel, new GridBagConstraints(0, 1, 1, 1, 1, 0, GridBagConstraints.CENTER,
                 GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
         panel.add(connectionLabel, new GridBagConstraints(0, 2, 1, 1, 1, 0, GridBagConstraints.CENTER,

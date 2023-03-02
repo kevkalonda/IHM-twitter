@@ -1,24 +1,23 @@
 package main.java.com.ubo.tp.twitub.core;
 
-import java.io.File;
-
 import main.java.com.ubo.tp.twitub.component.*;
 import main.java.com.ubo.tp.twitub.controller.*;
-import main.java.com.ubo.tp.twitub.datamodel.Database;
-import main.java.com.ubo.tp.twitub.datamodel.IDatabase;
-import main.java.com.ubo.tp.twitub.datamodel.User;
-import main.java.com.ubo.tp.twitub.datamodel.WatchableDataBase;
+import main.java.com.ubo.tp.twitub.datamodel.*;
+import main.java.com.ubo.tp.twitub.datamodel.model.ModelHome;
 import main.java.com.ubo.tp.twitub.events.file.IWatchableDirectory;
 import main.java.com.ubo.tp.twitub.events.file.WatchableDirectory;
 import main.java.com.ubo.tp.twitub.ihm.TwitubMainView;
 import main.java.com.ubo.tp.twitub.ihm.TwitubMock;
+
+import java.io.File;
+import java.util.Set;
 
 /**
  * Classe principale l'application.
  *
  * @author S.Lucas
  */
-public class Twitub implements IController{
+public class Twitub implements IController {
     /**
      * Base de données.
      */
@@ -40,6 +39,11 @@ public class Twitub implements IController{
      * Controller du view Login
      */
     HomeController homeController;
+
+    /**
+     * Controller du view voir un twit
+     */
+    Controlerenvoyertwit controlerenvoyertwit;
 
     /**
      * Gestionnaire des entités contenu de la base de données.
@@ -65,7 +69,7 @@ public class Twitub implements IController{
     /**
      * Indique si le mode bouchoné est activé.
      */
-    protected boolean mIsMockEnabled = false;
+    protected boolean mIsMockEnabled = true;
 
     /**
      * Nom de la classe de l'UI.
@@ -73,6 +77,8 @@ public class Twitub implements IController{
     protected String mUiClassName;
 
     protected User tagUser;
+
+    protected ModelHome modelHome;
 
     public User getTagUser() {
         return tagUser;
@@ -93,16 +99,15 @@ public class Twitub implements IController{
         this.initDatabase();
 
 
-
         // Initialisation du controller
         this.initController();
+        this.initModel();
 
-//        if (this.mIsMockEnabled) {
-//            // Initialisation du bouchon de travail
-//            this.initMock();
-//        }
+        if (this.mIsMockEnabled) {
+            // Initialisation du bouchon de travail
+            this.initMock();
+        }
         // Initialisation de l'IHM
-        this.initMock();
         this.initGui();
 
 
@@ -111,11 +116,15 @@ public class Twitub implements IController{
 
     }
 
+    private void initModel() {
+        modelHome = new ModelHome(this);
+    }
+
     private void initController() {
         controllerSignIn = new ControllerSignIn(mDatabase, this);
         controllerLogin = new ControllerLogin(mDatabase, this);
-        homeController = new HomeController(mDatabase.getTwits(), mDatabase.getUsers(), this.getTagUser(), this);
-
+        homeController = new HomeController( );
+        controlerenvoyertwit = new Controlerenvoyertwit(mDatabase, this, null);
     }
 
     /**
@@ -124,13 +133,24 @@ public class Twitub implements IController{
     protected void initLookAndFeel() {
     }
 
+    public Set<Twit> getAllTwits() {
+        return this.mDatabase.getTwits();
+    }
+
+
+
     /**
      * Initialisation de l'interface graphique.
      */
     protected void initGui() {
         // this.mMainView...
+        this.homeController.addObserver(this.modelHome);
         this.mMainView = new TwitubMainView(this.mEntityManager);
         mMainView.showGUI(controllerLogin);
+    }
+
+    public TwitubMainView getTwitubMainView(){
+        return this.mMainView;
     }
 
     /**
@@ -198,7 +218,7 @@ public class Twitub implements IController{
 
     @Override
     public void showHome() {
-        mMainView.show(new Home(homeController));
+        mMainView.show(modelHome.showHome());
     }
 
     @Override
@@ -218,6 +238,6 @@ public class Twitub implements IController{
 
     @Override
     public void showAddTwit() {
-        mMainView.show(new Twitpanel().getPanel());
+        mMainView.show(new Twitpanel(controlerenvoyertwit).getPanel());
     }
 }

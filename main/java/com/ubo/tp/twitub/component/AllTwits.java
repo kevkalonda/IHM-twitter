@@ -5,6 +5,7 @@ import main.java.com.ubo.tp.twitub.datamodel.User;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Date;
 import java.util.Set;
 
 public class AllTwits extends JPanel {
@@ -19,52 +20,37 @@ public class AllTwits extends JPanel {
         JPanel  all= new JPanel();
 
          panel= new JPanel();
+         panel.setLayout(new GridBagLayout());
         //Spécifier la position et la taille du JPanel
-        panel.setLayout(new GridBagLayout());
+        //panel.setLayout(new GridBagLayout());
         int compteur = 1;
         System.out.println("Nombre de twits..."+listTwit.size());
-        for(Twit twit : listTwit){
-            JPanel  panelTwit = new JPanel();
-            panelTwit.setBackground(Color.lightGray);
-            panel.setBorder(
+
+        Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+        int i = 1;
+        for(Twit twit: listTwit){
+            JPanel panel1 = new JPanel();
+            panel1.setLayout(new GridBagLayout());
+            panel1.setBorder(
                     BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLUE)
             );
-
-            JTextArea  text = new JTextArea (250, 200);
-            text.setFont(new Font("Serif", Font.PLAIN, 17));
-            text.setLineWrap(true);
-            text.setWrapStyleWord(false);
-            text.setEditable(false);
-            text.append("Mes twits..."+twit.getText());
-            System.out.println("Mes twits..."+twit.getText());
-
             JLabel label = new JLabel(twit.getTwiter().getUserTag());
+            JLabel tagUser = new JLabel(twit.getText());
+            Date date = new Date(twit.getEmissionDate());
+            JLabel twitter = new JLabel(date.toString());
 
-            JButton suivre = createButton("suivre");
-            suivre.setBackground(Color.blue);
-            suivre.setForeground(Color.white);
+            panel1.add(label, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.CENTER,
+                    GridBagConstraints.NONE, new Insets(0, 0, 0, 0), (int) screenSize.getWidth() - 400, 5));
+            panel1.add(tagUser, new GridBagConstraints(0, 2, 1, 1, 1, 1, GridBagConstraints.CENTER,
+                    GridBagConstraints.NONE, new Insets(10, 0, 0, 0), (int) screenSize.getWidth() - 400, 5));
+            panel1.add(twitter, new GridBagConstraints(0, 3, 1, 1, 1, 1, GridBagConstraints.CENTER,
+                    GridBagConstraints.NONE, new Insets(10, (int)screenSize.getWidth() - 380, 0, 0), 0, 5));
 
-//            panelTwit.add(label, new GridBagConstraints(1, 1, 1, 1, 0, 0, GridBagConstraints.CENTER,
-//                    GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-//            panelTwit.add(text, new GridBagConstraints(1, 2, 1, 1, 0, 0, GridBagConstraints.CENTER,
-//                    GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-//            if(isFollow(user.getFollows(), twit.getTwiter().getUserTag())){
-//                panelTwit.add(suivre, new GridBagConstraints(1, 3, 1, 1, 0, 0, GridBagConstraints.CENTER,
-//                        GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-//            }
-//
-//            all.add(panelTwit, new GridBagConstraints(1, compteur, 0, 0, 0, 0, GridBagConstraints.CENTER,
-//                    GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-            //            compteur++;
-            panel.add(text);
-
+            panel.add(panel1, new GridBagConstraints(0, i, 1, 1, 1, 1, GridBagConstraints.CENTER,
+                    GridBagConstraints.NONE, new Insets(0, 0, 0, 0), (int) 0, 0));
+            i++;
         }
         this.add(panel);
-
-
-//        JScrollPane panelScroll = new JScrollPane(all);
-//        this.add(panelScroll, new GridBagConstraints(1, 1, 1, 1, 0, 0, GridBagConstraints.NONE,
-//                GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
     }
 
     public boolean isFollow(Set<String> list, String tag){

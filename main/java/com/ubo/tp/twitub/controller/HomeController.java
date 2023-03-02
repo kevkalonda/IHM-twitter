@@ -1,32 +1,23 @@
 package main.java.com.ubo.tp.twitub.controller;
 
+import main.java.com.ubo.tp.twitub.core.Twitub;
+import main.java.com.ubo.tp.twitub.datamodel.IDatabase;
 import main.java.com.ubo.tp.twitub.datamodel.IDatabaseObserver;
 import main.java.com.ubo.tp.twitub.datamodel.Twit;
 import main.java.com.ubo.tp.twitub.datamodel.User;
+import main.java.com.ubo.tp.twitub.datamodel.model.Observable;
+import main.java.com.ubo.tp.twitub.datamodel.model.Observer;
 
+import java.util.HashSet;
 import java.util.Set;
 
 
-public class HomeController implements IDatabaseObserver {
+public class HomeController implements IDatabaseObserver, Observable {
 
-    Set<Twit> twitList;
-    Set<User> userList;
-    User user;
-    IController controller;
+    Set<Observer> observers;
 
-    public Set<Twit> getTwitList() {
-        return twitList;
-    }
-
-    public Set<User> getUserList() {
-        return userList;
-    }
-
-    public HomeController(Set<Twit> twitList, Set<User> userList, User user, IController controller) {
-        this.twitList = twitList;
-        this.userList = userList;
-        this.user = user;
-        this.controller = controller;
+    public HomeController() {
+        observers = new HashSet<>();
     }
 
     /**
@@ -37,7 +28,7 @@ public class HomeController implements IDatabaseObserver {
     @Override
     public void notifyTwitAdded(Twit addedTwit) {
         System.out.println("ouiiiii add");
-        twitList.add(addedTwit);
+        notifyObservers();
     }
 
     /**
@@ -47,7 +38,7 @@ public class HomeController implements IDatabaseObserver {
      */
     @Override
     public void notifyTwitDeleted(Twit deletedTwit) {
-        twitList.remove(deletedTwit);
+        notifyObservers();
     }
 
     /**
@@ -57,9 +48,7 @@ public class HomeController implements IDatabaseObserver {
      */
     @Override
     public void notifyTwitModified(Twit modifiedTwit) {
-        if (twitList.contains(modifiedTwit)) {
-            twitList.add(modifiedTwit);
-        }
+        notifyObservers();
     }
 
     /**
@@ -69,7 +58,7 @@ public class HomeController implements IDatabaseObserver {
      */
     @Override
     public void notifyUserAdded(User addedUser) {
-        userList.add(addedUser);
+        notifyObservers();
     }
 
     /**
@@ -79,7 +68,7 @@ public class HomeController implements IDatabaseObserver {
      */
     @Override
     public void notifyUserDeleted(User deletedUser) {
-        userList.remove(deletedUser);
+        notifyObservers();
     }
 
     /**
@@ -89,16 +78,32 @@ public class HomeController implements IDatabaseObserver {
      */
     @Override
     public void notifyUserModified(User modifiedUser) {
-        if (userList.contains(modifiedUser)) {
-            userList.add(modifiedUser);
+        notifyObservers();
+    }
+
+    /**
+     * @param observer
+     */
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    /**
+     * @param observer
+     */
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void notifyObservers() {
+        for(Observer observer : this.observers){
+            observer.update();
         }
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }
