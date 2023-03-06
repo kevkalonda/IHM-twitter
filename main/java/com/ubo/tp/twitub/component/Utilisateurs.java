@@ -140,7 +140,6 @@ public class Utilisateurs extends JPanel {
         JButton btn = new JButton(name);
         return btn;
     }
-
     private String verifSession(Session session){
         if(session.getUser() != null) {
             return  "@"+session.getUser().getUserTag();
@@ -149,5 +148,4 @@ public class Utilisateurs extends JPanel {
         }
 
     }
-
 }

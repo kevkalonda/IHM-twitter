@@ -18,7 +18,6 @@ public class HomeController implements IDatabaseObserver, Observable {
     IController controller;
     IDatabase database;
     EntityManager entityManager;
-
     public HomeController(IController controller, IDatabase database, EntityManager entityManager) {
         observers = new HashSet<>();
         this.controller = controller;
