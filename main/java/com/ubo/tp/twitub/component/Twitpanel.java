@@ -1,6 +1,5 @@
 package main.java.com.ubo.tp.twitub.component;
 
-
 import main.java.com.ubo.tp.twitub.controller.ControllerEnvoyerTwit;
 
 import javax.swing.*;
@@ -9,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Twitpanel extends JPanel {
-
 
     ControllerEnvoyerTwit controlerenvoyertwit;
 
@@ -25,8 +23,6 @@ public class Twitpanel extends JPanel {
      *
      * @param database , Base de donnÃ©es de l'application.
      */
-
-
     public Twitpanel(ControllerEnvoyerTwit c) {
         this.controlerenvoyertwit=c;
         // CrÃ©ation de la fenetre principale
@@ -75,7 +71,6 @@ public class Twitpanel extends JPanel {
         );
 
         jsp.setPreferredSize(new Dimension((int) (screenSize.getWidth() - 280), (int) (screenSize.getHeight() - 100)));
-
 
         JButton annulerButton = createButton("Annuler");
         annulerButton.setBackground(Color.lightGray);

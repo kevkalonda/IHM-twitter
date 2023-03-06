@@ -98,6 +98,7 @@ public class Twitub implements IController {
      * Model de recherche de l'tilisateur
      */
     protected ModelSearch modelSearch;
+
     /**
      * Nom de la classe de l'UI.
      */
@@ -105,7 +106,6 @@ public class Twitub implements IController {
 
 
     protected ModelHome modelHome;
-
 
     protected ListTwits listTwits;
 
@@ -133,7 +133,6 @@ public class Twitub implements IController {
 
         // Initialisation du controller
         this.initController();
-        this.initModel();
 
         if (this.mIsMockEnabled) {
             // Initialisation du bouchon de travail
@@ -184,17 +183,11 @@ public class Twitub implements IController {
      */
     protected void initGui() {
         // this.mMainView...
-
-
         this.homeController.addObserver(this.modelHome);
         this.homeController.addObserver(this.modelUtilisateurs);
         this.homeController.addObserver(this.modelSearch);
         this.mMainView = new TwitubMainView(this.mEntityManager, menuController);
         mMainView.showGUI(controllerLogin);
-    }
-
-    public TwitubMainView getTwitubMainView(){
-        return this.mMainView;
     }
 
     /**
@@ -312,4 +305,5 @@ public class Twitub implements IController {
     public Set<User> getAllUser() {
         return mDatabase.getUsers();
     }
+
 }

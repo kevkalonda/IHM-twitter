@@ -1,6 +1,5 @@
 package main.java.com.ubo.tp.twitub.controller;
 
-
 import main.java.com.ubo.tp.twitub.core.EntityManager;
 import main.java.com.ubo.tp.twitub.datamodel.IDatabase;
 import main.java.com.ubo.tp.twitub.datamodel.IDatabaseObserver;
@@ -16,11 +15,9 @@ import java.util.Set;
 public class HomeController implements IDatabaseObserver, Observable {
 
     Set<Observer> observers;
-
     IController controller;
     IDatabase database;
     EntityManager entityManager;
-
 
     public HomeController(IController controller, IDatabase database, EntityManager entityManager) {
         observers = new HashSet<>();

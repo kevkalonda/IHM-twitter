@@ -97,6 +97,7 @@ public class Utilisateurs extends JPanel {
         prenom.setFont(new Font(prenom.getName(), prenom.getFont().getStyle(), 15));
 
         JLabel tag = new JLabel(this.verifSession(session));
+
         tag.setFont(new Font(tag.getName(), tag.getFont().getStyle(), 15));
 
 
@@ -148,4 +149,5 @@ public class Utilisateurs extends JPanel {
         }
 
     }
+
 }

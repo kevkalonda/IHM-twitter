@@ -1,7 +1,6 @@
 package main.java.com.ubo.tp.twitub.datamodel.model;
 
 import main.java.com.ubo.tp.twitub.component.Home;
-
 import main.java.com.ubo.tp.twitub.controller.HomeController;
 import main.java.com.ubo.tp.twitub.controller.MesTwitsController;
 import main.java.com.ubo.tp.twitub.controller.SearchController;

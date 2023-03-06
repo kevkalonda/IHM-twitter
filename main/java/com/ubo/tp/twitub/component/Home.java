@@ -7,6 +7,7 @@ import main.java.com.ubo.tp.twitub.datamodel.Twit;
 import main.java.com.ubo.tp.twitub.datamodel.User;
 import main.java.com.ubo.tp.twitub.datamodel.model.Session;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -101,6 +102,7 @@ public class Home extends JPanel {
         prenom.setFont(new Font(prenom.getName(), prenom.getFont().getStyle(), 15));
 
         JLabel tag = new JLabel(this.verif(user));
+
         tag.setFont(new Font(tag.getName(), tag.getFont().getStyle(), 15));
 
 
@@ -149,6 +151,7 @@ public class Home extends JPanel {
         return btn;
     }
 
+
     private String verif(User user){
         if(user != null){
             return user.getUserTag();
@@ -156,4 +159,5 @@ public class Home extends JPanel {
             return "@Non connecté";
         }
     }
+
 }
