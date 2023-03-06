@@ -1,26 +1,31 @@
 package main.java.com.ubo.tp.twitub.component;
 
 import main.java.com.ubo.tp.twitub.controller.HomeController;
+import main.java.com.ubo.tp.twitub.controller.MesTwitsController;
 import main.java.com.ubo.tp.twitub.datamodel.Twit;
 import main.java.com.ubo.tp.twitub.datamodel.User;
 import main.java.com.ubo.tp.twitub.datamodel.model.ModelHome;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Set;
 
 public class Home extends JPanel {
     Set<Twit> twitList;
     User userConnect;
-    public Home(Set<Twit> twitList, User user ){
+    MesTwitsController mesTwitsController;
+    public Home(Set<Twit> twitList, User user, MesTwitsController mesTwitsController){
         userConnect = user;
         this.twitList = twitList;
+        this.mesTwitsController = mesTwitsController;
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-/**
- * here
- */
+        /**
+         * here
+         */
         AllTwits allTwits = new AllTwits(twitList, user);
         allTwits.setBackground(Color.lightGray);
         allTwits.setBorder(
@@ -29,6 +34,13 @@ public class Home extends JPanel {
         JButton suivre = createButton("Mes twit");
         suivre.setBackground(Color.blue);
         suivre.setForeground(Color.white);
+
+        suivre.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Home.this.mesTwitsController.redirectMesTwits();
+            }
+        });
 
         JLabel label = new JLabel( "Welcome ");
         label.setFont(new Font(label.getName(),label.getFont().getStyle(), 20));
@@ -55,7 +67,6 @@ public class Home extends JPanel {
                 GridBagConstraints.NONE, new Insets(0, 0, 10, 0), (int) 0, 0));
         panel.add(allTwits, new GridBagConstraints(0, 4, 2, 1, 1, 1, GridBagConstraints.CENTER,
                 GridBagConstraints.NONE, new Insets(0, 0, 10, 0), (int) 0, 0));
-
 
         this.add(panel);
     }

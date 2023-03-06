@@ -28,6 +28,13 @@ public class AllTwits extends JPanel {
 
         Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         int i = 1;
+        if(listTwit.size() == 0){
+            JLabel aucunTwit = new JLabel("Aucun twit");
+            aucunTwit.setFont(new Font(aucunTwit.getName(), aucunTwit.getFont().getStyle(), 40));
+            aucunTwit.setForeground(Color.red);
+            panel.add(aucunTwit, new GridBagConstraints(0, i, 1, 1, 1, 1, GridBagConstraints.CENTER,
+                    GridBagConstraints.NONE, new Insets(0, 0, 0, 0), (int) 0, 0));
+        }
         for(Twit twit: listTwit){
             JPanel panel1 = new JPanel();
             panel1.setLayout(new GridBagLayout());

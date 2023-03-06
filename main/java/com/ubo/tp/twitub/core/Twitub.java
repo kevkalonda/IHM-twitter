@@ -4,13 +4,17 @@ import main.java.com.ubo.tp.twitub.component.*;
 import main.java.com.ubo.tp.twitub.controller.*;
 import main.java.com.ubo.tp.twitub.datamodel.*;
 import main.java.com.ubo.tp.twitub.datamodel.model.ModelHome;
+import main.java.com.ubo.tp.twitub.datamodel.model.Observer;
 import main.java.com.ubo.tp.twitub.events.file.IWatchableDirectory;
 import main.java.com.ubo.tp.twitub.events.file.WatchableDirectory;
 import main.java.com.ubo.tp.twitub.ihm.TwitubMainView;
 import main.java.com.ubo.tp.twitub.ihm.TwitubMock;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Classe principale l'application.
@@ -44,6 +48,8 @@ public class Twitub implements IController {
      * Controller du view voir un twit
      */
     Controlerenvoyertwit controlerenvoyertwit;
+
+    MesTwitsController mesTwitsController;
 
     /**
      * Gestionnaire des entités contenu de la base de données.
@@ -101,7 +107,6 @@ public class Twitub implements IController {
 
         // Initialisation du controller
         this.initController();
-        this.initModel();
 
         if (this.mIsMockEnabled) {
             // Initialisation du bouchon de travail
@@ -117,14 +122,17 @@ public class Twitub implements IController {
     }
 
     private void initModel() {
-        modelHome = new ModelHome(this);
+        modelHome = new ModelHome(this, mesTwitsController);
     }
 
     private void initController() {
         controllerSignIn = new ControllerSignIn(mDatabase, this);
         controllerLogin = new ControllerLogin(mDatabase, this);
-        homeController = new HomeController( );
+        homeController = new HomeController();
         controlerenvoyertwit = new Controlerenvoyertwit(mDatabase, this, null);
+        mesTwitsController = new MesTwitsController(this);
+
+        initModel();
     }
 
     /**
@@ -144,13 +152,13 @@ public class Twitub implements IController {
      */
     protected void initGui() {
         // this.mMainView...
+        int randomInt = new Random().nextInt(99999);
+        String userName = "MockUser" + randomInt;
+        User newUser = new User(UUID.randomUUID(), userName, "--", userName, new HashSet<>(), "");
+        this.tagUser = newUser;
         this.homeController.addObserver(this.modelHome);
         this.mMainView = new TwitubMainView(this.mEntityManager);
         mMainView.showGUI(controllerLogin);
-    }
-
-    public TwitubMainView getTwitubMainView(){
-        return this.mMainView;
     }
 
     /**
@@ -240,4 +248,11 @@ public class Twitub implements IController {
     public void showAddTwit() {
         mMainView.show(new Twitpanel(controlerenvoyertwit).getPanel());
     }
+
+    @Override
+    public void showMyTwits() {
+        mMainView.show(new MesTwits(mDatabase.getTwitsWithTag(this.tagUser.getUserTag()), this.tagUser));
+    }
+
+
 }

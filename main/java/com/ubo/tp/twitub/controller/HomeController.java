@@ -16,9 +16,12 @@ public class HomeController implements IDatabaseObserver, Observable {
 
     Set<Observer> observers;
 
+
     public HomeController() {
         observers = new HashSet<>();
+
     }
+
 
     /**
      * Notification lorsqu'un Twit est ajouté en base de données.

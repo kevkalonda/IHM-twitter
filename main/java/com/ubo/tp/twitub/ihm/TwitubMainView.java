@@ -34,6 +34,14 @@ public class TwitubMainView {
         this.mEntityManager = entityManager;
     }
 
+    public JFrame getmFrame() {
+        return mFrame;
+    }
+
+    public void setmFrame(JFrame mFrame) {
+        this.mFrame = mFrame;
+    }
+
     public void show(JPanel panel) {
         this.mFrame.getContentPane().removeAll();
         this.mFrame.getContentPane().add(panel);

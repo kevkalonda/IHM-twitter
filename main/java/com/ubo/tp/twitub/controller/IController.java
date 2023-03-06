@@ -6,5 +6,6 @@ public interface IController {
     void showSignIn();
     void showProfil();
     void showAddTwit();
+    void showMyTwits();
 
 }
