@@ -9,7 +9,4 @@ public  class MesTwitsController {
         this.controller = controller;
     }
 
-    public  void redirectMesTwits(){
-        controller.showMyTwits();
-    }
 }

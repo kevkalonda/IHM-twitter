@@ -166,6 +166,7 @@ public class Twit {
 	 * {@link Constants#USER_TAG_DELIMITER}</i>
 	 */
 	public Set<String> getUserTags() {
+
 		return new HashSet<>(mUserTags);
 	}
 

@@ -35,7 +35,23 @@ public class Login extends JPanel{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Login.this.controller.connexion(textField1.getText(), passwordField.getPassword().toString());
+                if (passwordField.getText().length() > 0 && textField1.getText().length() > 0) {
+                    Login.this.controller.connexion(textField1.getText(), passwordField.getText());
+                } else {
+                    if (textField1.getText().length() <= 0) {
+                        //System.out.println("Veillez renseigner le Login!");
+                        textField1.repaint();
+
+                        textField1.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red));
+                        passwordField.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black));
+
+                    } else {
+                        //System.out.println("Veillez renseigner le mot de passe!");
+                        passwordField.repaint();
+                        passwordField.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red));
+                        textField1.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black));
+                    }
+                }
             }
         });
 

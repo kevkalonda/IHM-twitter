@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:twitXml xmlns:ns2="http://www.example.org/twit/">
+    <ID>0a83aa1f-20cf-410c-a3cc-ca3a3318455d</ID>
+    <EmissionDate>1678118055061</EmissionDate>
+    <Twiter>26d01f92-e7cd-4053-a93d-e1650a4a98b7</Twiter>
+    <Text>bonjour,
+je suis fatiguée de toi @kevkalonda !
+
+Merci</Text>
+</ns2:twitXml>

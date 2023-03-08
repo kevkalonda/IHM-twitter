@@ -224,7 +224,10 @@ public class TwitubMock {
         User randomUser = new ArrayList<User>(this.mDatabase.getUsers()).get(Math.max(0, userIndex - 1));
 
         // Création d'un twit fictif
-        Twit newTwit = new Twit(randomUser, "Twit fictif!! #Mock #test ;)");
+        Twit newTwit = new Twit(randomUser,"Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et " +
+                "dolore magna aliqua.Lorem ipsum dolor sit amet, " +
+                "consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua." +
+                "Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua...");
 
         return newTwit;
     }

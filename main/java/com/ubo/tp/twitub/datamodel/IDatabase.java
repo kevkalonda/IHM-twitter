@@ -35,14 +35,22 @@ public interface IDatabase {
 
 	/**
 	 * Ajoute un twit à la base de données.
-	 * 
+	 *
 	 * @param twitToAdd
 	 */
 	void addTwit(Twit twitToAdd);
 
 	/**
+	 * Trouver un utilisateur à partir de son tag.
+	 *
+	 * @param tag le tag de l'utilisateur
+	 * @return {@link User}
+	 */
+	User findUserByTag(String tag);
+
+	/**
 	 * Supprime un twit de la base de données.
-	 * 
+	 *
 	 * @param twitToRemove
 	 */
 	void removeTwit(Twit twitToRemove);
@@ -109,17 +117,21 @@ public interface IDatabase {
 
 	/**
 	 * Retourne tous les Twits d'un utilisateur.
-	 * 
-	 * @param user
-	 *            , utilisateur dont les twits sont à rechercher.
+	 *
+	 * @param user , utilisateur dont les twits sont à rechercher.
 	 */
 	Set<Twit> getUserTwits(User user);
 
 	/**
+	 * @param tag
+	 * @return
+	 */
+	Set<Twit> getTwitsByUserTag(String tag);
+
+	/**
 	 * Retourne tous les utilisateurs suivant l'utilisateur donnée
-	 * 
-	 * @param user
-	 *            , utilisateur dont les followers sont à rechercher.
+	 *
+	 * @param user , utilisateur dont les followers sont à rechercher.
 	 */
 	Set<User> getFollowers(User user);
 

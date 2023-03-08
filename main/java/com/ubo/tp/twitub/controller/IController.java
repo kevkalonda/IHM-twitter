@@ -7,5 +7,7 @@ public interface IController {
     void showProfil();
     void showAddTwit();
     void showMyTwits();
-
+    void showUser();
+    void showResultSearchTwit();
+    void showResultSearchUser();
 }
