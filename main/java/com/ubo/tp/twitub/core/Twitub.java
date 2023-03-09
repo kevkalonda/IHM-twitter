@@ -190,6 +190,7 @@ public class Twitub implements IController {
         mMainView.showGUI(controllerLogin);
     }
 
+
     /**
      * Initialisation du répertoire d'échange (depuis la conf ou depuis un file
      * chooser). <br/>

@@ -1,12 +1,10 @@
 package main.java.com.ubo.tp.twitub.component;
 
 import main.java.com.ubo.tp.twitub.controller.HomeController;
-
 import main.java.com.ubo.tp.twitub.controller.SearchController;
 import main.java.com.ubo.tp.twitub.datamodel.Twit;
 import main.java.com.ubo.tp.twitub.datamodel.User;
 import main.java.com.ubo.tp.twitub.datamodel.model.Session;
-
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +15,6 @@ import java.util.Set;
 public class Home extends JPanel {
     Set<Twit> twitList;
     User userConnect;
-
     HomeController homeController;
     SearchController searchController;
     public Home(Set<Twit> twitList, User user, HomeController homeController, SearchController searchController) {
@@ -103,6 +100,7 @@ public class Home extends JPanel {
 
         JLabel tag = new JLabel(this.verif(user));
 
+
         tag.setFont(new Font(tag.getName(), tag.getFont().getStyle(), 15));
 
 
@@ -150,7 +148,6 @@ public class Home extends JPanel {
         JButton btn = new JButton(name);
         return btn;
     }
-
 
     private String verif(User user){
         if(user != null){
